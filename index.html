@@ -1,450 +1,456 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>J.A.R.V.I.S.</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JARVIS AI</title>
 
-<style>
-*{box-sizing:border-box}
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-body{
-  margin:0;
-  min-height:100vh;
-  background:
-    radial-gradient(circle at center,#082438 0%,#03070c 45%,#010204 100%);
-  color:#00eaff;
-  font-family:Arial,sans-serif;
-  overflow-x:hidden;
-}
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: #02050a;
+      color: #00eaff;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
 
-body:before{
-  content:"";
-  position:fixed;
-  inset:0;
-  background:linear-gradient(rgba(0,234,255,.04) 1px,transparent 1px),
-             linear-gradient(90deg,rgba(0,234,255,.04) 1px,transparent 1px);
-  background-size:40px 40px;
-  pointer-events:none;
-}
+    .container {
+      width: 92%;
+      max-width: 700px;
+      text-align: center;
+    }
 
-.app{
-  width:min(1100px,94%);
-  margin:auto;
-  padding:25px 0;
-}
+    h1 {
+      font-size: 48px;
+      letter-spacing: 8px;
+      margin-bottom: 10px;
+      text-shadow: 0 0 20px #00eaff;
+    }
 
-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  border-bottom:1px solid rgba(0,234,255,.3);
-  padding-bottom:15px;
-}
+    .status {
+      color: #7ffcff;
+      margin-bottom: 35px;
+    }
 
-.logo{
-  font-size:25px;
-  font-weight:bold;
-  letter-spacing:6px;
-  text-shadow:0 0 15px #00eaff;
-}
+    .core {
+      width: 190px;
+      height: 190px;
+      margin: 0 auto 35px;
+      border-radius: 50%;
+      border: 3px solid #00eaff;
+      box-shadow:
+        0 0 20px #00eaff,
+        0 0 60px #007bff,
+        inset 0 0 30px #00eaff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: pulse 2s infinite;
+    }
 
-.online{
-  font-size:12px;
-  letter-spacing:2px;
-}
+    .core span {
+      font-size: 25px;
+      font-weight: bold;
+      text-shadow: 0 0 15px #00eaff;
+    }
 
-.dot{
-  display:inline-block;
-  width:9px;
-  height:9px;
-  background:#00ff9d;
-  border-radius:50%;
-  box-shadow:0 0 12px #00ff9d;
-  margin-right:7px;
-}
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.08);
+      }
+    }
 
-.main{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:25px;
-  margin-top:35px;
-}
+    .output {
+      min-height: 90px;
+      padding: 20px;
+      margin-bottom: 20px;
+      border: 1px solid #00eaff;
+      border-radius: 12px;
+      background: rgba(0, 234, 255, 0.05);
+      box-shadow: 0 0 15px rgba(0,234,255,.2);
+      color: white;
+      line-height: 1.6;
+    }
 
-.core-area{
-  min-height:480px;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-}
+    .controls {
+      display: flex;
+      gap: 10px;
+    }
 
-.core{
-  width:260px;
-  height:260px;
-  border-radius:50%;
-  border:2px solid #00eaff;
-  position:relative;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  box-shadow:0 0 25px #00eaff,
-             inset 0 0 35px #007bff;
-  animation:pulse 3s infinite;
-}
+    input {
+      flex: 1;
+      padding: 15px;
+      border-radius: 10px;
+      border: 1px solid #00eaff;
+      background: #050b12;
+      color: white;
+      outline: none;
+      font-size: 16px;
+    }
 
-.core:before,.core:after{
-  content:"";
-  position:absolute;
-  border-radius:50%;
-  border:1px solid #00eaff;
-}
+    button {
+      padding: 15px 18px;
+      border: 1px solid #00eaff;
+      border-radius: 10px;
+      background: #03131b;
+      color: #00eaff;
+      cursor: pointer;
+      font-weight: bold;
+    }
 
-.core:before{
-  width:190px;
-  height:190px;
-  border-left-color:transparent;
-  border-right-color:transparent;
-  animation:spin 5s linear infinite;
-}
+    button:hover {
+      background: #00eaff;
+      color: #001016;
+      box-shadow: 0 0 20px #00eaff;
+    }
 
-.core:after{
-  width:135px;
-  height:135px;
-  border-top-color:transparent;
-  border-bottom-color:transparent;
-  animation:spin 3s linear infinite reverse;
-}
+    .mic {
+      margin-top: 15px;
+      width: 100%;
+    }
 
-.eye{
-  width:65px;
-  height:65px;
-  border-radius:50%;
-  background:#00eaff;
-  box-shadow:0 0 45px #00eaff;
-}
-
-@keyframes pulse{
-  50%{transform:scale(1.04);box-shadow:0 0 55px #00eaff,inset 0 0 45px #007bff}
-}
-
-@keyframes spin{
-  to{transform:rotate(360deg)}
-}
-
-.title{
-  margin-top:30px;
-  font-size:32px;
-  letter-spacing:8px;
-  text-shadow:0 0 18px #00eaff;
-}
-
-.status{
-  margin-top:8px;
-  color:#8cefff;
-}
-
-.panel{
-  background:rgba(0,20,32,.55);
-  border:1px solid rgba(0,234,255,.3);
-  border-radius:15px;
-  padding:22px;
-  backdrop-filter:blur(8px);
-  box-shadow:0 0 25px rgba(0,234,255,.08);
-}
-
-.panel h2{
-  margin-top:0;
-  font-size:16px;
-  letter-spacing:3px;
-}
-
-.output{
-  min-height:180px;
-  color:#d9fbff;
-  line-height:1.7;
-  border-bottom:1px solid rgba(0,234,255,.2);
-  padding-bottom:15px;
-}
-
-.command{
-  margin-top:20px;
-  width:100%;
-  padding:14px;
-  background:#02090f;
-  border:1px solid #00eaff;
-  border-radius:8px;
-  color:#fff;
-  outline:none;
-}
-
-button{
-  width:100%;
-  margin-top:12px;
-  padding:15px;
-  border:1px solid #00eaff;
-  border-radius:8px;
-  background:rgba(0,234,255,.08);
-  color:#00eaff;
-  font-size:16px;
-  font-weight:bold;
-  letter-spacing:2px;
-  cursor:pointer;
-  transition:.2s;
-}
-
-button:hover{
-  background:#00eaff;
-  color:#021018;
-  box-shadow:0 0 25px #00eaff;
-}
-
-.cards{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:12px;
-  margin-top:20px;
-}
-
-.card{
-  padding:15px;
-  text-align:center;
-  border:1px solid rgba(0,234,255,.2);
-  border-radius:10px;
-}
-
-.card small{
-  display:block;
-  color:#75aeb8;
-  margin-bottom:6px;
-}
-
-@media(max-width:750px){
-  .main{grid-template-columns:1fr}
-  .core-area{min-height:390px}
-  .core{width:210px;height:210px}
-  .cards{grid-template-columns:1fr}
-}
-</style>
+    .listening {
+      color: #00ff88;
+      text-shadow: 0 0 15px #00ff88;
+    }
+  </style>
 </head>
 
 <body>
 
-<div class="app">
+  <div class="container">
 
-<header>
-  <div class="logo">J.A.R.V.I.S.</div>
-  <div class="online"><span class="dot"></span>SYSTEM ONLINE</div>
-</header>
+    <h1>JARVIS</h1>
 
-<div class="main">
+    <div class="status" id="status">
+      AI SYSTEM ONLINE
+    </div>
 
-<section class="core-area">
-  <div class="core">
-    <div class="eye"></div>
+    <div class="core">
+      <span>J</span>
+    </div>
+
+    <div class="output" id="output">
+      Hello! I am JARVIS. How can I help you?
+    </div>
+
+    <div class="controls">
+      <input
+        id="command"
+        type="text"
+        placeholder="Ask JARVIS anything..."
+        autocomplete="off"
+      >
+
+      <button onclick="sendCommand()">SEND</button>
+    </div>
+
+    <button class="mic" onclick="startListening()">
+      🎤 TALK TO JARVIS
+    </button>
+
   </div>
-
-  <div class="title">JARVIS</div>
-  <div class="status" id="status">STANDBY</div>
-</section>
-
-<section class="panel">
-
-<h2>PERSONAL AI ASSISTANT</h2>
-
-<div class="output" id="output">
-  <b>JARVIS:</b><br>
-  Hello, Sir. I am ready.<br><br>
-  You can say:<br>
-  • "Hello Jarvis"<br>
-  • "What time is it?"<br>
-  • "Open YouTube"<br>
-  • "Open Google"<br>
-  • "Urdu mein baat karo"
-</div>
-
-<input
-  class="command"
-  id="textCommand"
-  placeholder="Type a command..."
->
-
-<button onclick="sendText()">SEND COMMAND</button>
-<button onclick="activateJarvis()">🎙 ACTIVATE JARVIS</button>
-
-<div class="cards">
-  <div class="card">
-    <small>VOICE</small>
-    READY
-  </div>
-  <div class="card">
-    <small>LANGUAGE</small>
-    EN / UR
-  </div>
-  <div class="card">
-    <small>MODE</small>
-    AI
-  </div>
-</div>
-
-</section>
-
-</div>
-</div>
 
 <script>
 
-const output=document.getElementById("output");
-const status=document.getElementById("status");
+const output = document.getElementById("output");
+const commandInput = document.getElementById("command");
+const statusText = document.getElementById("status");
 
-function speak(text,lang="en-US"){
+function speak(text) {
+  if (!("speechSynthesis" in window)) return;
+
   window.speechSynthesis.cancel();
 
-  const voice=new SpeechSynthesisUtterance(text);
-  voice.lang=lang;
-  voice.rate=.95;
-  voice.pitch=1;
+  const speech = new SpeechSynthesisUtterance(text);
 
-  window.speechSynthesis.speak(voice);
+  speech.lang = /[\u0600-\u06FF]/.test(text)
+    ? "ur-PK"
+    : "en-US";
+
+  speech.rate = 1;
+  speech.pitch = 1;
+
+  window.speechSynthesis.speak(speech);
 }
 
-function show(text){
-  output.innerHTML="<b>JARVIS:</b><br>"+text;
+function show(text) {
+  output.innerText = text;
 }
 
-function processCommand(command){
-
-  command=command.toLowerCase().trim();
-
-  status.innerText="PROCESSING";
-
-  if(command.includes("hello") ||
-     command.includes("hi") ||
-     command.includes("salam")){
-
-    show("Hello Sir. It is good to hear from you.");
-    speak("Hello Sir. It is good to hear from you.");
-  }
-
-  else if(command.includes("who are you")){
-
-    show("I am JARVIS, your personal AI assistant.");
-    speak("I am JARVIS, your personal AI assistant.");
-  }
-
-  else if(command.includes("time") ||
-          command.includes("waqt")){
-
-    const now=new Date();
-    const time=now.toLocaleTimeString();
-
-    show("Sir, the current time is "+time);
-    speak("Sir, the current time is "+time);
-  }
-
-  else if(command.includes("open youtube")){
-
-    show("Opening YouTube, Sir.");
-    speak("Opening YouTube, Sir.");
-    window.open("https://www.youtube.com","_blank");
-  }
-
-  else if(command.includes("open google")){
-
-    show("Opening Google, Sir.");
-    speak("Opening Google, Sir.");
-    window.open("https://www.google.com","_blank");
-  }
-
-  else if(command.includes("urdu") ||
-          command.includes("اردو")){
-
-    show("جی سر، اب میں اردو میں بات کروں گا۔");
-    speak("جی سر، اب میں اردو میں بات کروں گا۔","ur-PK");
-  }
-
-  else if(command.includes("thank")){
-
-    show("You're welcome, Sir.");
-    speak("You're welcome, Sir.");
-  }
-
-  else{
-
-    show("I heard: <b>"+command+
-         "</b><br><br>This command is not connected yet.");
-
-    speak("I heard your command, Sir. This function is not connected yet.");
-  }
-
-  setTimeout(()=>{
-    status.innerText="STANDBY";
-  },1500);
+function openYouTube() {
+  window.open("https://www.youtube.com", "_blank");
 }
 
-function sendText(){
-
-  const input=document.getElementById("textCommand");
-  const command=input.value;
-
-  if(!command)return;
-
-  processCommand(command);
-  input.value="";
+function openGoogle() {
+  window.open("https://www.google.com", "_blank");
 }
 
-function activateJarvis(){
+function searchYouTube(query) {
+  const url =
+    "https://www.youtube.com/results?search_query=" +
+    encodeURIComponent(query);
 
-  const Recognition=
-    window.SpeechRecognition ||
-    window.webkitSpeechRecognition;
+  window.open(url, "_blank");
+}
 
-  if(!Recognition){
+function searchGoogle(query) {
+  const url =
+    "https://www.google.com/search?q=" +
+    encodeURIComponent(query);
 
-    show("Voice recognition is not supported in this browser.");
+  window.open(url, "_blank");
+}
+
+async function askAI(message) {
+
+  statusText.innerText = "JARVIS IS THINKING...";
+
+  show("Thinking... 🤖");
+
+  try {
+
+    const response = await fetch("/api/chat", {
+      method: "POST",
+
+      headers: {
+        "Content-Type": "application/json"
+      },
+
+      body: JSON.stringify({
+        message: message
+      })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "AI request failed");
+    }
+
+    const reply = data.reply || "Sorry, I could not answer that.";
+
+    show(reply);
+    speak(reply);
+
+    statusText.innerText = "AI SYSTEM ONLINE";
+
+  } catch (error) {
+
+    console.error(error);
+
+    const message =
+      "Sorry bhai, AI connection mein problem aa rahi hai.";
+
+    show(message);
+    speak(message);
+
+    statusText.innerText = "CONNECTION ERROR";
+  }
+}
+
+async function processCommand(command) {
+
+  const text = command.trim();
+  const lower = text.toLowerCase();
+
+  if (!text) return;
+
+  show("You: " + text);
+
+  // YouTube
+  if (
+    lower === "open youtube" ||
+    lower === "youtube kholo" ||
+    lower === "youtube open karo"
+  ) {
+    const reply = "Opening YouTube.";
+
+    show(reply);
+    speak(reply);
+    openYouTube();
     return;
   }
 
-  const recognition=new Recognition();
+  // YouTube search
+  if (
+    lower.startsWith("search youtube for ") ||
+    lower.startsWith("youtube search ")
+  ) {
 
-  recognition.lang="en-US";
-  recognition.continuous=false;
-  recognition.interimResults=false;
+    let query = "";
 
-  status.innerText="LISTENING...";
-  show("🎙 Listening, Sir...");
+    if (lower.startsWith("search youtube for ")) {
+      query = text.substring(19);
+    } else {
+      query = text.substring(15);
+    }
 
-  recognition.start();
+    const reply = "Searching YouTube for " + query;
 
-  recognition.onresult=function(event){
+    show(reply);
+    speak(reply);
 
-    const command=
-      event.results[0][0].transcript;
+    searchYouTube(query);
+    return;
+  }
 
-    show("You: <b>"+command+"</b><br><br>Processing...");
-    processCommand(command);
-  };
+  // Google
+  if (
+    lower === "open google" ||
+    lower === "google kholo" ||
+    lower === "google open karo"
+  ) {
+    const reply = "Opening Google.";
 
-  recognition.onerror=function(){
+    show(reply);
+    speak(reply);
+    openGoogle();
+    return;
+  }
 
-    status.innerText="STANDBY";
-    show("I couldn't hear you, Sir. Please try again.");
-  };
+  // Google search
+  if (
+    lower.startsWith("search google for ")
+  ) {
+
+    const query = text.substring(18);
+
+    const reply = "Searching Google for " + query;
+
+    show(reply);
+    speak(reply);
+
+    searchGoogle(query);
+    return;
+  }
+
+  // Time
+  if (
+    lower === "what time is it" ||
+    lower === "time kya hai" ||
+    lower === "waqt kya hai"
+  ) {
+
+    const now = new Date();
+
+    const time = now.toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit"
+    });
+
+    const reply = "The current time is " + time;
+
+    show(reply);
+    speak(reply);
+    return;
+  }
+
+  // Everything else → AI
+  await askAI(text);
 }
 
-document
-.getElementById("textCommand")
-.addEventListener("keydown",function(e){
+function sendCommand() {
 
-  if(e.key==="Enter"){
-    sendText();
+  const command = commandInput.value.trim();
+
+  if (!command) return;
+
+  commandInput.value = "";
+
+  processCommand(command);
+}
+
+commandInput.addEventListener("keydown", function(event) {
+
+  if (event.key === "Enter") {
+    sendCommand();
   }
 
 });
+
+
+// Voice Recognition
+
+const SpeechRecognition =
+  window.SpeechRecognition ||
+  window.webkitSpeechRecognition;
+
+let recognition;
+
+if (SpeechRecognition) {
+
+  recognition = new SpeechRecognition();
+
+  recognition.continuous = false;
+  recognition.interimResults = false;
+
+  recognition.lang = "en-US";
+
+  recognition.onstart = function() {
+
+    statusText.innerText = "LISTENING... 🎤";
+    statusText.classList.add("listening");
+
+  };
+
+  recognition.onend = function() {
+
+    statusText.innerText = "AI SYSTEM ONLINE";
+    statusText.classList.remove("listening");
+
+  };
+
+  recognition.onerror = function(event) {
+
+    console.error(event.error);
+
+    statusText.innerText = "VOICE ERROR";
+
+  };
+
+  recognition.onresult = function(event) {
+
+    const text =
+      event.results[0][0].transcript;
+
+    commandInput.value = text;
+
+    processCommand(text);
+
+  };
+
+} else {
+
+  console.log("Speech recognition is not supported.");
+}
+
+function startListening() {
+
+  if (!recognition) {
+
+    alert(
+      "Voice recognition is not supported in this browser."
+    );
+
+    return;
+  }
+
+  recognition.start();
+}
 
 </script>
 
 </body>
 </html>
-```
